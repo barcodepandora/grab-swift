@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 Juan Manuel Moreno. All rights reserved.
 //
 
-import Cocoa
+import UIKit
 import XCTest
 
 class JsonTests: XCTestCase {
@@ -33,4 +33,50 @@ class JsonTests: XCTestCase {
         }
     }
 
+    func testHello() {
+        // This is an example of a functional test case.
+        
+        let client = JSONClient()
+        XCTAssertEqual(client.hello(), "Hola", "YES")
+    }
+    
+    func testDoJSON() {
+        // This is an example of a functional test case.
+        
+        let client = JSONClient()
+        client.doJson()
+        XCTAssert(true, "Pass")
+    }
+    
+    func testDoCategories() {
+        // This is an example of a functional test case.
+        
+        let client = JSONClient()
+        let categories = client.doCategories()
+        for category in categories {
+            
+            let name = category["name"]
+            println("La categoria es \(name as! NSString))");
+        }
+        XCTAssert(true, "Pass")
+    }
+    
+    func testDoSubcategories() {
+        // This is an example of a functional test case.
+        
+        let client = JSONClient()
+        let subcategories = client.doSubcategories("Pasta")
+        for subcategory in subcategories {
+            
+            let name = subcategory["name"]
+            println("La subcategoria es \(name as! NSString))");
+            let piatti = subcategory["subcategory"]
+            for piatto in piatti as! [NSDictionary]  {
+            
+                let wendy = piatto["name"]
+                println("El plato es \(wendy as! NSString)");
+            }
+        }
+        XCTAssert(true, "Pass")
+    }
 }

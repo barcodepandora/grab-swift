@@ -6,8 +6,10 @@
 //  Copyright (c) 2015 Juan Manuel Moreno. All rights reserved.
 //
 
-import Cocoa
+import Foundation
 
 class Piatto: NSObject {
 
+    var name: String = ""
+    var price: Double = 0.0
 }
