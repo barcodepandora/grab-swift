@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import CoreData
 
 class MenuCategoryListViewController: UITableViewController {
     
-    var menu: [MenuCategory] = []
-    let aTransition = TransitionManager()
+    var menu: [MenuCategory] = [] // Array de cateogorias
+    let aTransition = TransitionManager() // Transiciones
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,8 +29,8 @@ class MenuCategoryListViewController: UITableViewController {
 
      override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) ->   UITableViewCell {
 
-        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "ListPrototypeCell")
-        cell.textLabel?.text = menu[indexPath.row].name
+        let cell: UITableViewCell = UITableViewCell(style: UITableViewCellStyle.Subtitle, reuseIdentifier: "ListPrototypeCell") // Cargamos cell dado el TableView con id. ListPrototypeCell
+        cell.textLabel?.text = menu[indexPath.row].name // Cargamos nombre de categoría dado por la posición de cell y array
         return cell
     }
 
@@ -43,28 +44,53 @@ class MenuCategoryListViewController: UITableViewController {
         
         if segue.identifier == "GoToCategorySegue" { // Validamos segue
             
-            let navigation = segue.destinationViewController as? UINavigationController // Referenciamos el UINavigationController
-            if let destination = navigation?.topViewController as? MenuCategoryViewController { // Validamos que navigation tiene MenuCategoryViewController
+            let navigation = segue.destinationViewController as? UINavigationController // Referenciamos el UINavigationController asociado al segue
+            if let destination = navigation?.topViewController as? MenuCategoryViewController { // Validamos que el objeto navigation tiene MenuCategoryViewController
 
-                destination.categoryN = menu[sender!.row].url
-                destination.title = menu[sender!.row].name
-                navigation!.transitioningDelegate = aTransition
+                destination.categoryN = menu[sender!.row].url // Cargamos nombre de categoría en MenuCategoryViewController
+                destination.title = menu[sender!.row].name // Cargamos título de MenuCategoryViewController.
+                navigation!.transitioningDelegate = aTransition // Cargamos transición
             }
         }
     }
 
+    /**
+     * Carga categorías desde un origen externo con cliente JSON
+     */
     func loadCategories() {
         
-        var category = MenuCategory();
+        var category = MenuCategory(); // Objeto categoría
         
-        var client = JSONClient();
-        client.doCategories();
-        for categoryT in client.categories {
+        var client = JSONClient(); // Cliente JSON.
+        client.doCategories(); // Traemos categorías con JSON.
+        
+        for categoryT in client.categories { // Recorremos categorías que trajimos.
 
-            category = MenuCategory();
+            category = MenuCategory(); // Cargamos categoría con contenido JSON
             category.name = categoryT["name"] as! String;
             category.url = categoryT["url"] as! String;
-            menu.append(category);
+            menu.append(category); // Agregamos a array de categorías.
         }
     }
+    
+    
+    /**
+     * Carga categorías con CoreData
+     */
+    /*func loadCategories() {
+    
+        var client = JSONClient(); // Cliente JSON.
+        client.doCategories(); // Traemos categorías con JSON.
+        
+        let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+        
+        for categoryT in client.categories { // Recorremos categorías que trajimos.
+            
+            let category = NSEntityDescription.insertNewObjectForEntityForName("MenuCategory", inManagedObjectContext: managedObjectContext!) as! MenuCategory
+            
+            category.name = categoryT["name"] as! String;
+            category.url = categoryT["url"] as! String;
+            menu.append(category); // Agregamos a array de categorías.
+        }
+    }*/
 }

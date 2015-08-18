@@ -13,3 +13,15 @@ class MenuCategory: NSObject {
     var name: String = ""
     var url: String = ""
 }
+
+/*
+ * Exercise object like Entity
+ */
+/*import CoreData
+
+@objc(MenuCategory)
+class MenuCategory: NSManagedObject {
+    
+    @NSManaged var name: String
+    @NSManaged var url: String
+}*/
